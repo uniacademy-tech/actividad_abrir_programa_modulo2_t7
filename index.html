@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Abriendo Cualquier Programa · T7 · Módulo 2 · Uni Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --gold:#f59e0b;--amber:#f97316;--yellow:#ffd93d;
+    --purple:#a78bfa;--cyan:#00f5e4;--green:#00e676;--red:#ff3d3d;
+    --bg:#060b18;--card:#0f1a10;--text:#e8f4ff;--muted:#7a8aaa;
+    --win:#0ea5e9;--mac:#a78bfa;--lin:#f97316;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;
+    background:radial-gradient(ellipse at 15% 40%,rgba(245,158,11,.08) 0%,transparent 55%),
+               radial-gradient(ellipse at 85% 20%,rgba(249,115,22,.05) 0%,transparent 55%);
+    pointer-events:none;z-index:0;}
+  body::after{content:'';position:fixed;inset:0;
+    background-image:linear-gradient(rgba(245,158,11,.016) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(245,158,11,.016) 1px,transparent 1px);
+    background-size:55px 55px;pointer-events:none;z-index:0;}
+
+  /* HEADER */
+  .header{position:relative;z-index:10;display:flex;align-items:center;
+    justify-content:space-between;padding:14px 32px;
+    border-bottom:1px solid rgba(245,158,11,.15);
+    background:rgba(6,11,24,.94);backdrop-filter:blur(14px);}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-badge{width:40px;height:40px;background:linear-gradient(135deg,var(--gold),var(--amber));
+    clip-path:polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Orbitron',monospace;font-size:9px;font-weight:900;color:#fff;}
+  .logo-text{font-family:'Orbitron',monospace;font-size:13px;font-weight:700;color:var(--gold);letter-spacing:2px;}
+  .logo-sub{font-size:9px;color:var(--muted);letter-spacing:1px;}
+  .header-badge{font-family:'Orbitron',monospace;font-size:10px;color:var(--yellow);
+    letter-spacing:2px;border:1px solid var(--yellow);padding:4px 14px;border-radius:2px;
+    background:rgba(255,217,61,.06);}
+
+  .container{position:relative;z-index:5;max-width:900px;margin:0 auto;padding:24px 18px 60px;}
+
+  /* UNI BAR */
+  .uni-bar{display:flex;align-items:center;gap:16px;background:var(--card);
+    border:1px solid rgba(245,158,11,.22);border-radius:16px;padding:14px 18px;
+    margin-bottom:20px;position:relative;overflow:hidden;}
+  .uni-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--gold),var(--amber),var(--yellow),var(--gold));}
+  .uni-svg{width:62px;height:62px;flex-shrink:0;}
+  .speech{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.22);
+    border-radius:12px;padding:10px 16px;flex:1;}
+  .uni-name{font-family:'Orbitron',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:4px;}
+  #uniMsg{font-size:14px;line-height:1.55;}
+  #uniMsg strong{color:var(--yellow);}
+
+  /* SEC CARD */
+  .sec{background:var(--card);border:1.5px solid rgba(245,158,11,.2);
+    border-radius:22px;overflow:hidden;box-shadow:0 22px 65px rgba(0,0,0,.6);}
+  .sec-top{height:4px;background:linear-gradient(90deg,var(--gold),var(--amber),var(--yellow));}
+  .sec-lbl{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:3px;color:var(--gold);
+    padding:8px 20px 6px;border-bottom:1px solid rgba(245,158,11,.1);}
+  .sec-body{padding:26px 22px;}
+
+  /* WELCOME */
+  .wh{text-align:center;margin-bottom:24px;}
+  .wh-icon{font-size:60px;margin-bottom:10px;filter:drop-shadow(0 4px 20px rgba(245,158,11,.5));}
+  .wh-title{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;
+    background:linear-gradient(135deg,var(--gold),var(--yellow));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    letter-spacing:3px;margin-bottom:8px;}
+  .wh-desc{font-size:14px;line-height:1.75;max-width:620px;margin:0 auto;color:rgba(255,255,255,.82);}
+  .wh-desc strong{color:var(--yellow);}
+
+  /* PROGRAM TYPES */
+  .prog-types{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;}
+  .pt{background:rgba(245,158,11,.05);border:1px solid rgba(245,158,11,.18);
+    border-radius:14px;padding:14px 10px;text-align:center;
+    animation:popIn .4s cubic-bezier(.34,1.56,.64,1) both;}
+  @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+  .pt-icon{font-size:30px;margin-bottom:6px;}
+  .pt-cat{font-family:'Orbitron',monospace;font-size:7px;color:var(--gold);letter-spacing:1px;margin-bottom:3px;}
+  .pt-name{font-size:11px;color:rgba(255,255,255,.75);line-height:1.4;}
+  .pt-ex{font-size:9px;color:var(--muted);margin-top:2px;}
+
+  /* OS ROW */
+  .os-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px;}
+  .os-chip{border-radius:12px;padding:11px 12px;text-align:center;border:1.5px solid;}
+  .os-chip.win{background:rgba(14,165,233,.07); border-color:rgba(14,165,233,.25);}
+  .os-chip.mac{background:rgba(167,139,250,.07);border-color:rgba(167,139,250,.25);}
+  .os-chip.lin{background:rgba(249,115,22,.07); border-color:rgba(249,115,22,.25);}
+  .os-icon{font-size:26px;margin-bottom:4px;}
+  .os-name{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;margin-bottom:3px;}
+  .os-chip.win .os-name{color:var(--win);}
+  .os-chip.mac .os-name{color:var(--mac);}
+  .os-chip.lin .os-name{color:var(--lin);}
+  .os-desc{font-size:10px;color:var(--muted);line-height:1.4;}
+
+  /* STEPS PREVIEW */
+  .steps-prev{display:flex;flex-direction:column;gap:8px;margin-bottom:22px;}
+  .sp-row{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;
+    background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.14);border-radius:11px;}
+  .sp-n{font-family:'Orbitron',monospace;font-size:14px;font-weight:900;color:var(--gold);width:24px;flex-shrink:0;}
+  .sp-body{flex:1;}
+  .sp-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);margin-bottom:2px;}
+  .sp-detail{font-size:11px;color:var(--muted);line-height:1.4;}
+
+  /* UNI TIP */
+  .uni-tip{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);
+    border-radius:13px;padding:13px 16px;margin-bottom:22px;font-size:13px;
+    color:rgba(255,255,255,.8);line-height:1.7;}
+  .uni-tip strong{color:var(--yellow);}
+
+  /* START BTN */
+  .btn-start{display:block;margin:0 auto;padding:15px 44px;
+    background:linear-gradient(135deg,var(--gold),var(--amber));
+    color:#fff;border:none;border-radius:14px;font-family:'Orbitron',monospace;font-size:14px;
+    font-weight:700;letter-spacing:2px;cursor:pointer;
+    box-shadow:0 8px 26px rgba(245,158,11,.4);transition:opacity .18s,transform .18s;}
+  .btn-start:hover{opacity:.88;transform:translateY(-2px);}
+
+  /* SIM SECTION */
+  .step-bar{display:flex;align-items:center;gap:10px;padding:10px 20px 6px;}
+  .sdots{display:flex;gap:5px;}
+  .sdot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.14);transition:all .3s;}
+  .sdot.done{background:var(--green);border-color:var(--green);}
+  .sdot.cur {background:var(--gold);border-color:var(--gold);transform:scale(1.4);box-shadow:0 0 8px rgba(245,158,11,.7);}
+  .prog-track{flex:1;height:6px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;}
+  .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--amber));transition:width .45s ease;}
+  .step-lbl{font-family:'Orbitron',monospace;font-size:9px;color:var(--muted);white-space:nowrap;}
+  .step-lbl span{color:var(--gold);}
+
+  .step-ok{background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);
+    margin:0 20px 6px;border-radius:9px;padding:8px 14px;font-size:12px;
+    color:var(--green);display:none;animation:fadeUp .25s ease;}
+  .step-ok.show{display:block;}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+
+  .sim-body{padding:0;}
+  .action-wrap{padding:10px 16px;border-top:1px solid rgba(245,158,11,.1);}
+  .btn-action{width:100%;padding:12px;
+    background:linear-gradient(135deg,var(--gold),var(--amber));
+    color:#fff;border:none;border-radius:12px;font-family:'Orbitron',monospace;font-size:12px;
+    font-weight:700;letter-spacing:2px;cursor:pointer;transition:opacity .18s,transform .18s;
+    box-shadow:0 4px 16px rgba(245,158,11,.3);}
+  .btn-action:hover{opacity:.85;transform:translateY(-1px);}
+  .btn-action:disabled{opacity:.3;cursor:not-allowed;transform:none;}
+
+  /* OS TABS (simulation) */
+  .os-tabs-row{display:flex;gap:6px;padding:8px 16px 0;flex-wrap:wrap;}
+  .os-tab{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:1px;padding:5px 12px;
+    border-radius:8px;border:1px solid;cursor:pointer;transition:all .2s;}
+  .os-tab.win{color:var(--win);border-color:rgba(14,165,233,.3);}
+  .os-tab.mac{color:var(--mac);border-color:rgba(167,139,250,.3);}
+  .os-tab.lin{color:var(--lin);border-color:rgba(249,115,22,.3);}
+  .os-tab.active.win{background:rgba(14,165,233,.15);box-shadow:0 0 10px rgba(14,165,233,.2);}
+  .os-tab.active.mac{background:rgba(167,139,250,.15);box-shadow:0 0 10px rgba(167,139,250,.2);}
+  .os-tab.active.lin{background:rgba(249,115,22,.15);box-shadow:0 0 10px rgba(249,115,22,.2);}
+  .os-hint{font-size:10px;color:var(--muted);padding:4px 16px 0;font-style:italic;}
+
+  /* ── DESKTOP SIMS ── */
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,0)}50%{box-shadow:0 0 0 8px rgba(245,158,11,.2)}}
+  .highlight-pulse{animation:pulse .9s ease-in-out infinite;}
+
+  /* Windows 11 */
+  .win11{background:linear-gradient(160deg,#0d2240,#061428);min-height:260px;
+    display:flex;flex-direction:column;position:relative;padding:8px;}
+  .win11-wallpaper-txt{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);
+    font-family:'Orbitron',monospace;font-size:28px;font-weight:900;
+    color:rgba(255,255,255,.05);letter-spacing:6px;white-space:nowrap;pointer-events:none;}
+  .win11-taskbar{background:rgba(0,0,0,.65);backdrop-filter:blur(20px);
+    height:44px;display:flex;align-items:center;justify-content:center;
+    gap:5px;border-radius:14px;margin-top:auto;border:1px solid rgba(255,255,255,.08);}
+  .tb-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:18px;cursor:pointer;transition:all .18s;
+    background:rgba(255,255,255,.05);}
+  .tb-icon:hover{background:rgba(255,255,255,.12);transform:scale(1.1);}
+  .tb-start{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;
+    justify-content:center;font-size:18px;cursor:pointer;transition:all .18s;
+    background:rgba(255,255,255,.05);}
+  .tb-start.highlight-pulse{background:rgba(14,165,233,.25);border:1.5px solid rgba(14,165,233,.6);}
+
+  /* Win Start Menu */
+  .win-start-menu{position:absolute;bottom:52px;left:50%;transform:translateX(-50%);
+    background:rgba(20,20,30,.97);backdrop-filter:blur(30px);
+    border:1px solid rgba(255,255,255,.12);border-radius:14px;
+    padding:14px;width:320px;box-shadow:0 16px 48px rgba(0,0,0,.7);display:none;}
+  .win-start-menu.show{display:block;animation:fadeUp .22s ease;}
+  .wsm-search{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);
+    border-radius:8px;padding:8px 12px;font-size:12px;color:rgba(255,255,255,.5);
+    display:flex;align-items:center;gap:8px;margin-bottom:12px;cursor:text;}
+  .wsm-search.highlight-pulse{border-color:var(--gold);background:rgba(245,158,11,.1);
+    color:var(--yellow);}
+  .wsm-search .cursor{display:inline-block;width:8px;height:14px;background:var(--yellow);
+    vertical-align:middle;animation:blink .7s step-end infinite;margin-left:2px;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+  .wsm-typing{color:var(--yellow);}
+  .wsm-apps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:8px;}
+  .wsm-app{text-align:center;padding:6px 3px;border-radius:6px;cursor:default;font-size:9px;color:rgba(255,255,255,.6);}
+  .wsm-app:hover{background:rgba(255,255,255,.07);}
+  .wsm-results{display:none;}
+  .wsm-results.show{display:block;}
+  .wsm-result-item{display:flex;align-items:center;gap:10px;padding:8px 10px;
+    border-radius:8px;cursor:pointer;font-size:12px;color:rgba(255,255,255,.9);
+    transition:background .15s;}
+  .wsm-result-item:hover{background:rgba(255,255,255,.07);}
+  .wsm-result-item.highlight-pulse{background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.4);}
+  .wsm-ri-icon{font-size:26px;flex-shrink:0;}
+  .wsm-ri-name{font-weight:600;}
+  .wsm-ri-type{font-size:10px;color:var(--muted);}
+
+  /* macOS */
+  .macos{background:linear-gradient(160deg,#1a1040,#2d0a4a,#0a0820);min-height:260px;
+    display:flex;flex-direction:column;position:relative;}
+  .mac-menubar{background:rgba(255,255,255,.12);backdrop-filter:blur(20px);
+    height:24px;display:flex;align-items:center;padding:0 12px;gap:14px;
+    border-bottom:1px solid rgba(255,255,255,.08);}
+  .mmb{font-size:11px;color:rgba(255,255,255,.85);cursor:pointer;}
+  .mac-content{flex:1;padding:8px;position:relative;}
+  .mac-dock{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
+    background:rgba(255,255,255,.15);backdrop-filter:blur(20px);
+    border-radius:16px;padding:5px 10px;display:flex;gap:5px;
+    border:1px solid rgba(255,255,255,.2);}
+  .dock-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;
+    justify-content:center;font-size:22px;cursor:pointer;transition:all .18s;
+    background:rgba(255,255,255,.1);}
+  .dock-ic:hover{transform:scale(1.2) translateY(-4px);}
+  .dock-ic.highlight-pulse{background:rgba(167,139,250,.3);border:1.5px solid rgba(167,139,250,.7);}
+
+  /* Launchpad */
+  .launchpad{position:absolute;inset:24px 0 0 0;background:rgba(0,0,0,.8);
+    backdrop-filter:blur(40px);display:none;padding:20px;}
+  .launchpad.show{display:block;animation:fadeUp .2s ease;}
+  .lp-search{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);
+    border-radius:10px;padding:7px 14px;font-size:12px;color:rgba(255,255,255,.5);
+    display:flex;align-items:center;gap:8px;margin-bottom:14px;width:200px;margin-left:auto;margin-right:auto;}
+  .lp-search.highlight-pulse{border-color:var(--mac);background:rgba(167,139,250,.15);color:#fff;}
+  .lp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+  .lp-app{text-align:center;cursor:pointer;}
+  .lp-app-icon{font-size:36px;margin-bottom:4px;border-radius:14px;
+    display:inline-block;padding:4px;}
+  .lp-app-name{font-size:10px;color:rgba(255,255,255,.8);}
+  .lp-app.highlight-pulse .lp-app-icon{background:rgba(167,139,250,.25);border:2px solid rgba(167,139,250,.6);}
+
+  /* Linux */
+  .linux{background:linear-gradient(160deg,#1a2010,#0d1808);min-height:260px;
+    display:flex;flex-direction:column;position:relative;}
+  .linux-topbar{background:rgba(0,0,0,.7);height:26px;display:flex;align-items:center;
+    padding:0 10px;gap:8px;border-bottom:1px solid rgba(255,255,255,.08);}
+  .ltb-apps{font-size:11px;color:rgba(255,255,255,.7);cursor:pointer;padding:2px 8px;border-radius:3px;}
+  .ltb-apps:hover{background:rgba(255,255,255,.1);}
+  .ltb-apps.highlight-pulse{background:rgba(249,115,22,.25);border:1px solid rgba(249,115,22,.5);}
+  .ltb-time{margin-left:auto;font-size:10px;color:rgba(255,255,255,.5);}
+  .linux-desk{flex:1;padding:8px;position:relative;}
+
+  /* Linux App Menu */
+  .linux-menu{position:absolute;top:26px;left:0;
+    background:rgba(18,24,18,.97);border:1px solid rgba(255,255,255,.12);
+    border-radius:0 8px 8px 0;padding:12px;width:240px;display:none;z-index:10;}
+  .linux-menu.show{display:block;animation:fadeUp .2s ease;}
+  .lm-search{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);
+    border-radius:6px;padding:6px 10px;font-size:11px;color:rgba(255,255,255,.5);
+    display:flex;align-items:center;gap:7px;margin-bottom:10px;}
+  .lm-search.highlight-pulse{border-color:var(--lin);background:rgba(249,115,22,.12);color:#fff;}
+  .lm-cat{font-family:'Orbitron',monospace;font-size:7px;color:var(--lin);letter-spacing:1px;
+    margin:6px 0 4px;}
+  .lm-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;
+    cursor:pointer;font-size:11px;color:rgba(255,255,255,.8);}
+  .lm-item:hover{background:rgba(255,255,255,.07);}
+  .lm-item.highlight-pulse{background:rgba(249,115,22,.15);border:1px solid rgba(249,115,22,.3);}
+
+  /* App opened window */
+  .app-window{background:#fff;border-radius:10px;overflow:hidden;border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 10px 36px rgba(0,0,0,.5);}
+  .aw-titlebar{background:#f0f0f0;padding:6px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #ddd;}
+  .aw-dots{display:flex;gap:4px;}
+  .aw-dot{width:11px;height:11px;border-radius:50%;}
+  .aw-title{font-size:11px;color:#555;flex:1;text-align:center;}
+  .aw-content{padding:16px;background:#fff;min-height:80px;}
+  .aw-line{height:7px;background:#e8e8e8;border-radius:3px;margin-bottom:7px;}
+  .aw-line.t{height:12px;width:55%;background:#d0d0d0;margin-bottom:12px;}
+
+  /* Anchor tip */
+  .anchor-tip{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);
+    border-radius:10px;padding:11px 14px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.6;}
+  .anchor-tip strong{color:var(--yellow);}
+
+  /* ── FELICIDADES ── */
+  .felicidades{display:none;background:var(--card);border-radius:22px;overflow:hidden;
+    box-shadow:0 28px 70px rgba(0,0,0,.6);margin-top:16px;}
+  .felicidades.show{display:block;}
+  .fel-top{height:6px;background:linear-gradient(90deg,var(--gold),var(--amber),var(--yellow),var(--gold));}
+  .fel-body{padding:44px 26px;text-align:center;}
+  .fel-stars{font-size:52px;letter-spacing:8px;margin-bottom:6px;
+    animation:starPop .7s cubic-bezier(.34,1.56,.64,1) both;}
+  @keyframes starPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+  .fel-title{font-family:'Orbitron',monospace;font-size:32px;font-weight:900;
+    background:linear-gradient(135deg,var(--gold),var(--yellow),var(--amber));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+    margin-bottom:14px;animation:glow 2s ease-in-out infinite alternate;}
+  @keyframes glow{from{filter:drop-shadow(0 0 6px rgba(245,158,11,.4))}to{filter:drop-shadow(0 0 18px rgba(255,217,61,.6))}}
+  .fel-msg{font-size:16px;line-height:1.85;max-width:580px;margin:0 auto 24px;color:rgba(255,255,255,.88);}
+  .fel-msg strong{color:var(--yellow);}
+  .fel-steps{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:26px;}
+  .fel-step{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);
+    border-radius:12px;padding:10px 14px;font-size:11px;color:rgba(255,255,255,.75);
+    text-align:center;min-width:110px;}
+  .fel-step strong{color:var(--gold);display:block;font-size:13px;margin-bottom:3px;}
+  .fel-tip{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);
+    border-radius:12px;padding:12px 16px;max-width:520px;margin:0 auto 24px;
+    font-size:12px;color:rgba(255,255,255,.72);line-height:1.7;}
+  .fel-tip strong{color:var(--yellow);}
+  .btn-menu{padding:14px 38px;background:linear-gradient(135deg,var(--gold),var(--amber));
+    color:#fff;border:none;border-radius:14px;font-family:'Orbitron',monospace;font-size:13px;
+    font-weight:700;letter-spacing:2px;cursor:pointer;
+    box-shadow:0 6px 24px rgba(245,158,11,.4);transition:opacity .2s,transform .2s;}
+  .btn-menu:hover{opacity:.88;transform:translateY(-2px);}
+
+  @keyframes conf{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--tx),var(--ty)) rotate(var(--r));opacity:0}}
+  .conf{position:fixed;pointer-events:none;animation:conf .9s ease-out forwards;z-index:999;}
+
+  @media(max-width:640px){
+    .header{padding:10px 14px;}
+    .container{padding:10px 8px 40px;}
+    .uni-bar{flex-direction:column;align-items:flex-start;}
+    .prog-types{grid-template-columns:1fr 1fr;}
+    .os-row{grid-template-columns:1fr;}
+    .fel-steps{flex-direction:column;align-items:center;}
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-badge">UNi</div>
+    <div><div class="logo-text">UNI ACADEMY</div><div class="logo-sub">MI PRIMER CURSO DE COMPUTACIÓN</div></div>
+  </div>
+  <div class="header-badge">💻 MÓDULO 2 · TEMA 7</div>
+</header>
+
+<div class="container">
+
+  <!-- UNI -->
+  <div class="uni-bar">
+    <svg class="uni-svg" viewBox="0 0 80 90" fill="none">
+      <ellipse cx="40" cy="75" rx="22" ry="6" fill="rgba(245,158,11,.13)"/>
+      <rect x="27" y="68" width="10" height="14" rx="4" fill="#2a1a0a"/>
+      <rect x="43" y="68" width="10" height="14" rx="4" fill="#2a1a0a"/>
+      <rect x="25" y="78" width="14" height="6" rx="3" fill="#3d2510"/>
+      <rect x="41" y="78" width="14" height="6" rx="3" fill="#3d2510"/>
+      <rect x="20" y="42" width="40" height="30" rx="10" fill="#2a1e0f"/>
+      <rect x="20" y="42" width="40" height="30" rx="10" stroke="#f59e0b" stroke-width="1.5" stroke-opacity=".5"/>
+      <circle cx="40" cy="57" r="5" fill="#f59e0b"/>
+      <circle cx="40" cy="57" r="3" fill="#fff" fill-opacity=".5"/>
+      <rect x="8" y="44" width="13" height="8" rx="4" fill="#2a1a0a"/>
+      <rect x="59" y="44" width="13" height="8" rx="4" fill="#2a1a0a"/>
+      <circle cx="10" cy="56" r="5" fill="#3d2510"/>
+      <circle cx="70" cy="56" r="5" fill="#3d2510"/>
+      <rect x="33" y="35" width="14" height="9" rx="4" fill="#2a1a0a"/>
+      <rect x="15" y="10" width="50" height="30" rx="14" fill="#2a1e0f"/>
+      <rect x="15" y="10" width="50" height="30" rx="14" stroke="#f59e0b" stroke-width="1.5" stroke-opacity=".55"/>
+      <rect x="20" y="16" width="40" height="18" rx="8" fill="#060b18"/>
+      <circle cx="32" cy="25" r="5" fill="#f59e0b"/>
+      <circle cx="32" cy="25" r="3" fill="#fff" fill-opacity=".5"/>
+      <circle cx="48" cy="25" r="5" fill="#f97316"/>
+      <circle cx="48" cy="25" r="3" fill="#fff" fill-opacity=".6"/>
+      <rect x="38" y="3" width="4" height="9" rx="2" fill="#3d2510"/>
+      <circle cx="40" cy="3" r="3" fill="#f59e0b"/>
+      <rect x="10" y="18" width="6" height="14" rx="3" fill="#3d2510"/>
+      <rect x="64" y="18" width="6" height="14" rx="3" fill="#3d2510"/>
+    </svg>
+    <div class="speech">
+      <div class="uni-name">// UNI · GUÍA DIGITAL</div>
+      <p id="uniMsg">¡Hola, Explorador! 💻 En este tema aprenderás a <strong>abrir cualquier programa</strong> en tu computadora. ¡Los mismos 3 pasos funcionan en Windows, Mac y Linux!</p>
+    </div>
+  </div>
+
+  <!-- ══ WELCOME ══ -->
+  <div id="secWelcome" class="sec">
+    <div class="sec-top"></div>
+    <div class="sec-lbl">// MÓDULO 2 · TEMA 7 · ABRIENDO CUALQUIER PROGRAMA</div>
+    <div class="sec-body">
+
+      <div class="wh">
+        <div class="wh-icon">🚀</div>
+        <div class="wh-title">ABRIENDO CUALQUIER PROGRAMA</div>
+        <div class="wh-desc">Un <strong>programa o aplicación</strong> es una herramienta diseñada para cumplir una función específica. Y lo mejor: <strong>los pasos para abrirlo son siempre los mismos</strong>, sin importar el sistema operativo.</div>
+      </div>
+
+      <!-- Tipos de programas -->
+      <div style="font-family:'Orbitron',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:12px;text-align:center;">// ¿PARA QUÉ SIRVEN LOS PROGRAMAS?</div>
+      <div class="prog-types">
+        <div class="pt" style="animation-delay:.05s">
+          <div class="pt-icon">✏️</div>
+          <div class="pt-cat">ESCRIBIR</div>
+          <div class="pt-name">Procesadores de texto</div>
+          <div class="pt-ex">Word · Pages · Bloc de Notas</div>
+        </div>
+        <div class="pt" style="animation-delay:.12s">
+          <div class="pt-icon">🎵</div>
+          <div class="pt-cat">MÚSICA</div>
+          <div class="pt-name">Reproductores de audio</div>
+          <div class="pt-ex">Spotify · Reproductor de Windows</div>
+        </div>
+        <div class="pt" style="animation-delay:.19s">
+          <div class="pt-icon">🎬</div>
+          <div class="pt-cat">VIDEOS</div>
+          <div class="pt-name">Reproductores de video</div>
+          <div class="pt-ex">VLC · YouTube · Fotos</div>
+        </div>
+        <div class="pt" style="animation-delay:.26s">
+          <div class="pt-icon">🌐</div>
+          <div class="pt-cat">INTERNET</div>
+          <div class="pt-name">Navegadores web</div>
+          <div class="pt-ex">Chrome · Edge · Safari</div>
+        </div>
+      </div>
+
+      <!-- OS compatibility -->
+      <div style="font-family:'Orbitron',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:12px;text-align:center;">// FUNCIONA IGUAL EN LOS 3 SISTEMAS</div>
+      <div class="os-row">
+        <div class="os-chip win">
+          <div class="os-icon">🪟</div>
+          <div class="os-name">WINDOWS</div>
+          <div class="os-desc">Botón de Inicio → barra de búsqueda → clic en el programa</div>
+        </div>
+        <div class="os-chip mac">
+          <div class="os-icon">🍎</div>
+          <div class="os-name">macOS</div>
+          <div class="os-desc">Launchpad (cohete) o manzana → búsqueda → clic en el programa</div>
+        </div>
+        <div class="os-chip lin">
+          <div class="os-icon">🐧</div>
+          <div class="os-name">LINUX</div>
+          <div class="os-desc">Menú principal → barra de búsqueda → clic en el programa</div>
+        </div>
+      </div>
+
+      <!-- 3 pasos -->
+      <div style="font-family:'Orbitron',monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:12px;text-align:center;">// LOS 3 PASOS QUE SIEMPRE FUNCIONAN</div>
+      <div class="steps-prev">
+        <div class="sp-row">
+          <div class="sp-n">1</div>
+          <div class="sp-body">
+            <div class="sp-title">Abre el Menú Principal</div>
+            <div class="sp-detail">En Windows: botón de Inicio (ícono de ventana). En Mac: Launchpad o manzana 🍎. En Linux: botón del menú en la esquina.</div>
+          </div>
+        </div>
+        <div class="sp-row">
+          <div class="sp-n">2</div>
+          <div class="sp-body">
+            <div class="sp-title">Busca por nombre con la Lupa 🔍</div>
+            <div class="sp-detail">Escribe lo que quieres hacer: "música", "Spotify", "Word", "VLC", "calculadora". ¡No necesitas saber el nombre exacto!</div>
+          </div>
+        </div>
+        <div class="sp-row">
+          <div class="sp-n">3</div>
+          <div class="sp-body">
+            <div class="sp-title">Haz clic en el programa que aparece</div>
+            <div class="sp-detail">En cuanto veas el ícono del programa en la lista, un clic izquierdo lo abre. ¡Tu espacio de trabajo o entretenimiento estará listo!</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNI tip -->
+      <div class="uni-tip">
+        💡 <strong>Consejo de UNI:</strong> "No necesitas memorizar el nombre exacto de todos los programas. Si buscas en la Lupa palabras sencillas como <strong>'música'</strong>, <strong>'video'</strong> o <strong>'calculadora'</strong>, tu computadora te mostrará las mejores opciones instaladas. ¡Da cada paso con total confianza!"
+      </div>
+
+      <button class="btn-start" id="btnStart">▶ &nbsp;INICIAR ACTIVIDAD</button>
+
+    </div>
+  </div>
+
+  <!-- ══ SIMULATION ══ -->
+  <div id="secSim" style="display:none;">
+    <div class="sec">
+      <div class="sec-top"></div>
+      <div class="sec-lbl" id="simLbl">// SIMULACIÓN · ABRIENDO SPOTIFY</div>
+      <div class="os-tabs-row">
+        <div class="os-tab win active" id="ostab-win">🪟 WINDOWS</div>
+        <div class="os-tab mac"        id="ostab-mac">🍎 macOS</div>
+        <div class="os-tab lin"        id="ostab-lin">🐧 LINUX</div>
+      </div>
+      <div class="os-hint" id="osHint">Puedes cambiar de sistema en cualquier momento para ver cómo se hace en cada uno.</div>
+      <div class="step-bar">
+        <div class="sdots" id="sdots"></div>
+        <div class="prog-track"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        <div class="step-lbl">Paso <span id="stepNum">1</span>/<span id="stepTotal">5</span></div>
+      </div>
+      <div class="step-ok" id="stepOk">✅ ¡Muy bien!</div>
+      <div class="sim-body" id="simBody"></div>
+      <div class="action-wrap">
+        <button class="btn-action" id="btnAction">→ SIGUIENTE PASO</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FELICIDADES ══ -->
+  <div class="felicidades" id="secFel">
+    <div class="fel-top"></div>
+    <div class="fel-body">
+      <div class="fel-stars">🎉⭐🎉</div>
+      <div class="fel-title">¡FELICIDADES!</div>
+      <div class="fel-msg">
+        ¡Lo lograste, Explorador! 🚀<br>
+        <strong>Ahora sabes abrir cualquier programa en tu computadora.</strong><br>
+        Con estos 3 sencillos pasos puedes abrir música, videos, documentos, navegadores y cualquier cosa que necesites, sin importar si usas Windows, Mac o Linux.
+      </div>
+      <div class="fel-steps">
+        <div class="fel-step"><strong>PASO 1 🖱️</strong>Abres el Menú Principal</div>
+        <div class="fel-step"><strong>PASO 2 🔍</strong>Buscas por nombre</div>
+        <div class="fel-step"><strong>PASO 3 ✅</strong>Haces clic y listo</div>
+      </div>
+      <div class="fel-tip">
+        <strong>💡 Atajo del día a día:</strong> Si usas un programa muy seguido, al buscarlo haz <strong>clic derecho</strong> sobre su ícono y selecciona <strong>"Anclar a la barra de tareas"</strong> o <strong>"Enviar al escritorio"</strong>. ¡Así lo abrirás con un solo clic sin buscarlo cada vez!
+      </div>
+      <button class="btn-menu" id="btnMenu">🏠 &nbsp;VOLVER AL INICIO</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ════════════════════════════
+   STATE
+════════════════════════════ */
+let currentOS  = 'win';
+let stepIdx    = 0;
+const TOTAL    = 5;
+const PROGRAMS = ['Spotify','VLC','Word','Google Chrome','Calculadora'];
+let   progName = 'Spotify';
+let   progIcon = '🎵';
+
+/* ════════════════════════════
+   STEPS DEFINITION (OS-aware renders)
+════════════════════════════ */
+const STEPS = [
+
+  /* ── PASO 1: Menú principal ── */
+  { lbl: ()=> `// PASO 1 · ABRE EL MENÚ PRINCIPAL`,
+    uni: ()=>{
+      const m={win:'🪟 <strong>Paso 1:</strong> Encuentra el <strong>botón de Inicio</strong> en la barra de tareas (parte inferior). Es el ícono con la ventanita azul de Windows. ¡Haz clic en él o pulsa el botón!',
+               mac:'🍎 <strong>Paso 1:</strong> Haz clic en el ícono del <strong>cohete 🚀 (Launchpad)</strong> en el Dock (barra inferior) o en la <strong>manzana 🍎</strong> del menú superior para acceder a las aplicaciones.',
+               lin:'🐧 <strong>Paso 1:</strong> Haz clic en el <strong>botón del menú principal</strong> en la esquina de la barra superior. Suele decir "Aplicaciones" o tener el logo de tu distribución de Linux.'};
+      return m[currentOS];
+    },
+    action: ()=> currentOS==='win'?'→ HACER CLIC EN EL BOTÓN DE INICIO 🪟':
+                 currentOS==='mac'?'→ HACER CLIC EN LAUNCHPAD 🚀':
+                                   '→ HACER CLIC EN EL MENÚ PRINCIPAL',
+    okMsg: ()=> currentOS==='win'?'¡Menú Inicio abierto! Se muestra el menú de Windows 11.':
+                currentOS==='mac'?'¡Launchpad abierto! Se muestran todas las aplicaciones.':
+                                  '¡Menú de aplicaciones abierto!',
+    render(body){
+      if(currentOS==='win') renderWinStep1(body);
+      else if(currentOS==='mac') renderMacStep1(body);
+      else renderLinStep1(body);
+    }
+  },
+
+  /* ── PASO 2: Barra de búsqueda ── */
+  { lbl: ()=> `// PASO 2 · ENCUENTRA LA BARRA DE BÚSQUEDA 🔍`,
+    uni: ()=>{
+      const m={win:`🔍 <strong>Paso 2:</strong> En el menú Inicio verás una <strong>barra de búsqueda</strong> con un ícono de lupa. Haz clic sobre ella. ¡Es donde escribiremos el nombre del programa que queremos abrir!`,
+               mac:`🔍 <strong>Paso 2:</strong> En Launchpad aparece una <strong>barra de búsqueda</strong> en la parte superior. También puedes presionar <kbd style="background:rgba(167,139,250,.2);padding:1px 6px;border-radius:4px;">⌘ Cmd + Espacio</kbd> para abrir Spotlight directamente.`,
+               lin:`🔍 <strong>Paso 2:</strong> En el menú de aplicaciones verás una <strong>barra de búsqueda</strong>. Haz clic sobre ella para activarla. ¡En Linux la búsqueda es igual de poderosa que en Windows y Mac!`};
+      return m[currentOS];
+    },
+    action: ()=>'→ HACER CLIC EN LA BARRA DE BÚSQUEDA 🔍',
+    okMsg: ()=>'¡Barra de búsqueda activada! Ahora escribimos el nombre.',
+    render(body){
+      if(currentOS==='win') renderWinStep2(body);
+      else if(currentOS==='mac') renderMacStep2(body);
+      else renderLinStep2(body);
+    }
+  },
+
+  /* ── PASO 3: Escribir nombre ── */
+  { lbl: ()=> `// PASO 3 · ESCRIBE EL NOMBRE DEL PROGRAMA`,
+    uni: ()=> `⌨️ <strong>Paso 3:</strong> Escribe el nombre del programa: <strong>"${progName}"</strong>. No necesitas escribirlo completo, con las primeras letras ya aparecerá. El sistema buscará automáticamente entre todos los programas instalados.`,
+    action: ()=> `→ ESCRIBIR "${progName}" EN LA BÚSQUEDA`,
+    okMsg: ()=> `¡"${progName}" escrito! El resultado aparece en la lista.`,
+    render(body){
+      if(currentOS==='win') renderWinStep3(body);
+      else if(currentOS==='mac') renderMacStep3(body);
+      else renderLinStep3(body);
+    }
+  },
+
+  /* ── PASO 4: Clic en resultado ── */
+  { lbl: ()=> `// PASO 4 · HAZ CLIC EN EL PROGRAMA`,
+    uni: ()=> `✅ <strong>Paso 4:</strong> ¡El programa <strong>${progName}</strong> apareció en la lista! Haz un <strong>clic izquierdo</strong> sobre él para abrirlo. ¡Es el "Clic de Entrada" que inicia todo!`,
+    action: ()=> `→ HACER CLIC EN ${progName} ${progIcon}`,
+    okMsg: ()=> `¡Clic en ${progName}! El programa está cargando…`,
+    render(body){
+      if(currentOS==='win') renderWinStep4(body);
+      else if(currentOS==='mac') renderMacStep4(body);
+      else renderLinStep4(body);
+    }
+  },
+
+  /* ── PASO 5: Programa abierto ── */
+  { lbl: ()=> `// PASO 5 · ¡PROGRAMA ABIERTO!`,
+    uni: ()=> `🎉 <strong>¡${progName} está abierto!</strong> Así de sencillo. Solo 3 pasos: Menú → Buscar → Clic. ¡Ya puedes usarlo para lo que necesites!`,
+    action: ()=> '✅ ¡COMPLETAR ACTIVIDAD!',
+    okMsg: ()=> '¡Actividad completada! ⭐',
+    render(body){
+      body.innerHTML=`<div style="padding:12px;background:#1a1a2e;">
+        <div class="app-window">
+          <div class="aw-titlebar">
+            <div class="aw-dots">
+              <div class="aw-dot" style="background:#ff5f57"></div>
+              <div class="aw-dot" style="background:#ffbd2e"></div>
+              <div class="aw-dot" style="background:#28ca41"></div>
+            </div>
+            <div class="aw-title">${progIcon} ${progName}</div>
+            <div style="font-size:14px;color:#888;">⊡ ✕</div>
+          </div>
+          <div class="aw-content">
+            <div class="aw-line t"></div>
+            <div class="aw-line"></div><div class="aw-line" style="width:75%"></div>
+            <div class="aw-line" style="width:50%"></div><div class="aw-line"></div>
+          </div>
+        </div>
+        <div style="margin-top:10px;background:rgba(0,230,118,.08);border:1px solid rgba(0,230,118,.2);
+          border-radius:10px;padding:10px 16px;font-size:12px;color:var(--green);text-align:center;">
+          ✅ ${progName} ${progIcon} se abrió correctamente · 3 pasos completados
+        </div>
+      </div>`;
+    }
+  },
+
+];
+
+/* ════════════════════════════
+   WINDOWS RENDERS
+════════════════════════════ */
+function win11Shell(content, taskbarHighlight=false){
+  return `<div class="win11">
+    <div class="win11-wallpaper-txt">WINDOWS 11</div>
+    ${content}
+    <div class="win11-taskbar">
+      <div class="tb-start ${taskbarHighlight?'highlight-pulse':''}" id="tbStart">🪟</div>
+      <div class="tb-icon">📁</div>
+      <div class="tb-icon">🌐</div>
+      <div class="tb-icon">⚙️</div>
+      <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.5);">10:30</div>
+    </div>
+  </div>`;
+}
+function renderWinStep1(body){
+  body.innerHTML=win11Shell('', true);
+  document.getElementById('tbStart').addEventListener('click', doStep);
+}
+function renderWinStep2(body){
+  body.innerHTML=win11Shell(`
+    <div class="win-start-menu show">
+      <div class="wsm-search highlight-pulse" id="wsmSearch">
+        🔍 &nbsp;Buscar en Windows
+      </div>
+      <div class="wsm-apps">
+        <div class="wsm-app"><div style="font-size:22px">📧</div>Correo</div>
+        <div class="wsm-app"><div style="font-size:22px">🌐</div>Edge</div>
+        <div class="wsm-app"><div style="font-size:22px">📁</div>Archivos</div>
+        <div class="wsm-app"><div style="font-size:22px">⚙️</div>Config</div>
+        <div class="wsm-app"><div style="font-size:22px">🗒️</div>Notas</div>
+      </div>
+    </div>`);
+  document.getElementById('wsmSearch').addEventListener('click', doStep);
+}
+function renderWinStep3(body){
+  body.innerHTML=win11Shell(`
+    <div class="win-start-menu show">
+      <div class="wsm-search" style="border-color:var(--gold);background:rgba(245,158,11,.1);">
+        🔍 &nbsp;<span class="wsm-typing">${progName}</span><span class="cursor"></span>
+      </div>
+      <div style="font-size:9px;color:var(--muted);padding:4px 2px;font-family:'Orbitron',monospace;letter-spacing:1px;">BUSCANDO…</div>
+    </div>`);
+}
+function renderWinStep4(body){
+  body.innerHTML=win11Shell(`
+    <div class="win-start-menu show">
+      <div class="wsm-search" style="border-color:var(--gold);background:rgba(245,158,11,.08);">
+        🔍 &nbsp;<span class="wsm-typing">${progName}</span>
+      </div>
+      <div class="wsm-results show">
+        <div style="font-size:9px;color:var(--muted);padding:2px 2px 6px;font-family:'Orbitron',monospace;letter-spacing:1px;">MEJOR COINCIDENCIA</div>
+        <div class="wsm-result-item highlight-pulse" id="wsmResult">
+          <div class="wsm-ri-icon">${progIcon}</div>
+          <div><div class="wsm-ri-name">${progName}</div><div class="wsm-ri-type">Aplicación</div></div>
+        </div>
+      </div>
+    </div>`);
+  document.getElementById('wsmResult').addEventListener('click', doStep);
+}
+
+/* ════════════════════════════
+   macOS RENDERS
+════════════════════════════ */
+function renderMacStep1(body){
+  body.innerHTML=`<div class="macos">
+    <div class="mac-menubar">
+      <div class="mmb" style="font-weight:700;">🍎</div>
+      <div class="mmb">Finder</div><div class="mmb">Archivo</div>
+      <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.5);">10:30</div>
+    </div>
+    <div class="mac-content" style="min-height:180px;"></div>
+    <div class="mac-dock">
+      <div class="dock-ic highlight-pulse" id="dockLaunch" title="Launchpad">🚀</div>
+      <div class="dock-ic">😊</div>
+      <div class="dock-ic">🌐</div>
+      <div class="dock-ic">📧</div>
+      <div class="dock-ic">⚙️</div>
+    </div>
+  </div>`;
+  document.getElementById('dockLaunch').addEventListener('click', doStep);
+}
+function renderMacStep2(body){
+  body.innerHTML=`<div class="macos">
+    <div class="mac-menubar">
+      <div class="mmb" style="font-weight:700;">🍎</div>
+      <div class="mmb">Finder</div>
+      <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,.5);">10:30</div>
+    </div>
+    <div class="mac-content" style="padding:0;position:relative;">
+      <div class="launchpad show">
+        <div class="lp-search highlight-pulse" id="lpSearch">🔍 &nbsp;Buscar</div>
+        <div class="lp-grid">
+          <div class="lp-app"><div class="lp-app-icon">📧</div><div class="lp-app-name">Mail</div></div>
+          <div class="lp-app"><div class="lp-app-icon">🌐</div><div class="lp-app-name">Safari</div></div>
+          <div class="lp-app"><div class="lp-app-icon">🗒️</div><div class="lp-app-name">Notas</div></div>
+          <div class="lp-app"><div class="lp-app-icon">📷</div><div class="lp-app-name">Fotos</div></div>
+          <div class="lp-app"><div class="lp-app-icon">🗓️</div><div class="lp-app-name">Calen.</div></div>
+          <div class="lp-app"><div class="lp-app-icon">🎵</div><div class="lp-app-name">Música</div></div>
+          <div class="lp-app"><div class="lp-app-icon">⚙️</div><div class="lp-app-name">Sistema</div></div>
+          <div class="lp-app"><div class="lp-app-icon">🗺️</div><div class="lp-app-name">Mapas</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="mac-dock" style="position:relative;z-index:2;">
+      <div class="dock-ic">🚀</div><div class="dock-ic">😊</div><div class="dock-ic">🌐</div>
+    </div>
+  </div>`;
+  document.getElementById('lpSearch').addEventListener('click', doStep);
+}
+function renderMacStep3(body){
+  body.innerHTML=`<div class="macos">
+    <div class="mac-menubar"><div class="mmb" style="font-weight:700;">🍎</div><div class="mmb">Finder</div></div>
+    <div class="mac-content" style="padding:0;position:relative;">
+      <div class="launchpad show">
+        <div class="lp-search" style="border-color:var(--mac);background:rgba(167,139,250,.15);">
+          🔍 &nbsp;<span style="color:#fff;">${progName}</span><span style="display:inline-block;width:8px;height:14px;background:#fff;vertical-align:middle;animation:blink .7s step-end infinite;margin-left:2px;"></span>
+        </div>
+        <div style="font-size:9px;color:var(--muted);padding:6px 0;font-family:'Orbitron',monospace;letter-spacing:1px;text-align:center;">BUSCANDO…</div>
+      </div>
+    </div>
+    <div class="mac-dock" style="position:relative;z-index:2;"><div class="dock-ic">🚀</div></div>
+  </div>`;
+}
+function renderMacStep4(body){
+  body.innerHTML=`<div class="macos">
+    <div class="mac-menubar"><div class="mmb" style="font-weight:700;">🍎</div><div class="mmb">Finder</div></div>
+    <div class="mac-content" style="padding:0;position:relative;">
+      <div class="launchpad show">
+        <div class="lp-search" style="border-color:var(--mac);background:rgba(167,139,250,.12);">
+          🔍 &nbsp;<span style="color:#fff;">${progName}</span>
+        </div>
+        <div class="lp-grid" style="grid-template-columns:repeat(3,1fr);gap:16px;margin-top:10px;">
+          <div class="lp-app highlight-pulse" id="lpResult">
+            <div class="lp-app-icon">${progIcon}</div>
+            <div class="lp-app-name">${progName}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mac-dock" style="position:relative;z-index:2;"><div class="dock-ic">🚀</div></div>
+  </div>`;
+  document.getElementById('lpResult').addEventListener('click', doStep);
+}
+
+/* ════════════════════════════
+   LINUX RENDERS
+════════════════════════════ */
+function renderLinStep1(body){
+  body.innerHTML=`<div class="linux">
+    <div class="linux-topbar">
+      <div class="ltb-apps highlight-pulse" id="ltbApps">Aplicaciones</div>
+      <div style="width:1px;height:16px;background:rgba(255,255,255,.15);"></div>
+      <div class="ltb-apps">Lugares</div>
+      <div class="ltb-time">10:30</div>
+    </div>
+    <div class="linux-desk" style="min-height:200px;">
+      <div style="position:absolute;top:20px;left:20px;text-align:center;cursor:default;">
+        <div style="font-size:32px;">📁</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.7);">Archivos</div>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('ltbApps').addEventListener('click', doStep);
+}
+function renderLinStep2(body){
+  body.innerHTML=`<div class="linux">
+    <div class="linux-topbar">
+      <div class="ltb-apps" style="background:rgba(249,115,22,.2);color:var(--lin);">Aplicaciones</div>
+      <div style="width:1px;height:16px;background:rgba(255,255,255,.15);"></div>
+      <div class="ltb-apps">Lugares</div>
+      <div class="ltb-time">10:30</div>
+    </div>
+    <div class="linux-desk" style="position:relative;">
+      <div class="linux-menu show">
+        <div class="lm-search highlight-pulse" id="lmSearch">🔍 &nbsp;Buscar aplicación…</div>
+        <div class="lm-cat">INTERNET</div>
+        <div class="lm-item">🌐 Firefox</div>
+        <div class="lm-cat">MULTIMEDIA</div>
+        <div class="lm-item">🎵 Reproductor</div>
+        <div class="lm-item">🎬 VLC</div>
+        <div class="lm-cat">OFICINA</div>
+        <div class="lm-item">✏️ LibreOffice</div>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('lmSearch').addEventListener('click', doStep);
+}
+function renderLinStep3(body){
+  body.innerHTML=`<div class="linux">
+    <div class="linux-topbar">
+      <div class="ltb-apps" style="background:rgba(249,115,22,.2);color:var(--lin);">Aplicaciones</div>
+      <div class="ltb-time">10:30</div>
+    </div>
+    <div class="linux-desk" style="position:relative;">
+      <div class="linux-menu show">
+        <div class="lm-search" style="border-color:var(--lin);background:rgba(249,115,22,.1);">
+          🔍 &nbsp;<span style="color:#fff;">${progName}</span><span style="display:inline-block;width:8px;height:14px;background:#fff;vertical-align:middle;animation:blink .7s step-end infinite;margin-left:2px;"></span>
+        </div>
+        <div style="font-size:9px;color:var(--muted);padding:6px 0 0;font-family:'Orbitron',monospace;letter-spacing:1px;">BUSCANDO…</div>
+      </div>
+    </div>
+  </div>`;
+}
+function renderLinStep4(body){
+  body.innerHTML=`<div class="linux">
+    <div class="linux-topbar">
+      <div class="ltb-apps" style="background:rgba(249,115,22,.2);color:var(--lin);">Aplicaciones</div>
+      <div class="ltb-time">10:30</div>
+    </div>
+    <div class="linux-desk" style="position:relative;">
+      <div class="linux-menu show">
+        <div class="lm-search" style="border-color:var(--lin);background:rgba(249,115,22,.08);">
+          🔍 &nbsp;<span style="color:#fff;">${progName}</span>
+        </div>
+        <div class="lm-cat">RESULTADO</div>
+        <div class="lm-item highlight-pulse" id="lmResult">
+          <span style="font-size:22px;">${progIcon}</span>
+          <span>${progName}</span>
+          <span style="font-size:9px;color:var(--muted);margin-left:auto;">Aplicación</span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('lmResult').addEventListener('click', doStep);
+}
+
+/* ════════════════════════════
+   ENGINE
+════════════════════════════ */
+function buildDots(){
+  const r=document.getElementById('sdots'); r.innerHTML='';
+  for(let i=0;i<TOTAL;i++){
+    const d=document.createElement('div');
+    d.className='sdot'+(i===0?' cur':''); d.id='sdot-'+i; r.appendChild(d);
+  }
+  document.getElementById('stepTotal').textContent=TOTAL;
+}
+
+function renderStep(){
+  const s=STEPS[stepIdx];
+  document.getElementById('simLbl').textContent   = s.lbl();
+  document.getElementById('stepNum').textContent  = stepIdx+1;
+  document.getElementById('progFill').style.width = (stepIdx/TOTAL*100)+'%';
+  document.getElementById('uniMsg').innerHTML     = s.uni();
+  document.getElementById('stepOk').classList.remove('show');
+  document.getElementById('btnAction').textContent= s.action();
+  document.getElementById('btnAction').disabled   = false;
+  for(let i=0;i<TOTAL;i++){
+    const d=document.getElementById('sdot-'+i);
+    if(d) d.className='sdot'+(i<stepIdx?'done':i===stepIdx?'cur':'');
+  }
+  s.render(document.getElementById('simBody'));
+}
+
+function doStep(){
+  const s  = STEPS[stepIdx];
+  const ok = document.getElementById('stepOk');
+  ok.textContent = '✅ '+s.okMsg();
+  ok.classList.add('show');
+  document.getElementById('btnAction').disabled=true;
+  spawnConf();
+  setTimeout(()=>{
+    ok.classList.remove('show');
+    stepIdx++;
+    if(stepIdx>=TOTAL) showFel(); else renderStep();
+  },900);
+}
+
+function switchOS(os){
+  currentOS=os;
+  ['win','mac','lin'].forEach(o=>{
+    document.getElementById('ostab-'+o).className='os-tab '+o+(o===os?' active':'');
+  });
+  // pick random program for variety
+  const progs=[['Spotify','🎵'],['VLC','🎬'],['Google Chrome','🌐'],['LibreOffice','📄'],['Calculadora','🔢']];
+  const pick=progs[Math.floor(Math.random()*progs.length)];
+  progName=pick[0]; progIcon=pick[1];
+  renderStep();
+  document.getElementById('uniMsg').innerHTML=STEPS[stepIdx].uni();
+}
+
+function startSim(){
+  stepIdx=0;
+  document.getElementById('secWelcome').style.display='none';
+  document.getElementById('secSim').style.display='block';
+  document.getElementById('secFel').classList.remove('show');
+  document.getElementById('progFill').style.width='0%';
+  const progs=[['Spotify','🎵'],['VLC','🎬'],['Google Chrome','🌐'],['LibreOffice','📄'],['Calculadora','🔢']];
+  const pick=progs[Math.floor(Math.random()*progs.length)];
+  progName=pick[0]; progIcon=pick[1];
+  buildDots(); renderStep();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showFel(){
+  document.getElementById('secSim').style.display='none';
+  document.getElementById('secFel').classList.add('show');
+  document.getElementById('uniMsg').innerHTML=
+    '⭐⭐⭐ ¡<strong>FELICIDADES</strong>! Ya sabes abrir cualquier programa en tu computadora. ¡Los mismos 3 pasos funcionan siempre!';
+  setTimeout(bigConf,100);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goMenu(){
+  document.getElementById('secFel').classList.remove('show');
+  document.getElementById('secSim').style.display='none';
+  document.getElementById('secWelcome').style.display='block';
+  document.getElementById('uniMsg').innerHTML=
+    '¡Hola, Explorador! 💻 ¿Quieres practicar otra vez? Recuerda: <strong>Menú → Buscar → Clic</strong>. ¡3 pasos y cualquier programa se abre!';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* CONFETTI */
+function spawnConf(){
+  const colors=['#f59e0b','#f97316','#ffd93d','#00e676','#a78bfa'];
+  for(let i=0;i<14;i++){
+    const p=document.createElement('div'); p.className='conf';
+    p.style.cssText=`background:${colors[i%colors.length]};width:9px;height:9px;border-radius:${Math.random()>.5?'50%':'2px'};
+      left:${20+Math.random()*60}vw;top:${15+Math.random()*25}vh;
+      --tx:${(Math.random()-.5)*180}px;--ty:${(Math.random()-.7)*140}px;--r:${Math.random()*360}deg;`;
+    document.body.appendChild(p); setTimeout(()=>p.remove(),950);
+  }
+}
+function bigConf(){
+  const colors=['#f59e0b','#f97316','#ffd93d','#00e676','#a78bfa','#00f5e4','#ec4899'];
+  for(let i=0;i<80;i++){
+    setTimeout(()=>{
+      const p=document.createElement('div'); p.className='conf';
+      p.style.cssText=`background:${colors[i%colors.length]};border-radius:${Math.random()>.5?'50%':'2px'};
+        width:${7+Math.random()*9}px;height:${7+Math.random()*9}px;
+        left:${5+Math.random()*90}vw;top:${3+Math.random()*30}vh;
+        --tx:${(Math.random()-.5)*320}px;--ty:${100+Math.random()*350}px;
+        --r:${Math.random()*720}deg;animation-duration:${.7+Math.random()*.5}s;`;
+      document.body.appendChild(p); setTimeout(()=>p.remove(),1200);
+    },i*22);
+  }
+}
+
+/* WIRE EVENTS */
+document.getElementById('btnStart').addEventListener('click', startSim);
+document.getElementById('btnAction').addEventListener('click', doStep);
+document.getElementById('btnMenu').addEventListener('click',  goMenu);
+document.getElementById('ostab-win').addEventListener('click', ()=>switchOS('win'));
+document.getElementById('ostab-mac').addEventListener('click', ()=>switchOS('mac'));
+document.getElementById('ostab-lin').addEventListener('click', ()=>switchOS('lin'));
+</script>
+</body>
+</html>
